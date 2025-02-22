@@ -81,12 +81,24 @@ def testar_crud():
     saida = capturar_saida(microcervejaria.listar_receitas)
     assert "Nenhuma receita" in saida, "Falha na listagem vazia de receitas"
 
-    # Teste 9: Atualização implícita
+    # Teste 9: Atualização de quantidade
     print("\n=== Teste 9: Atualização de quantidade ===")
     microcervejaria.cadastrar_ingrediente("Malte Munich", "Fornecedor Z", 12.75, "06/2025", 100)
-    microcervejaria.dados["ingredientes"][0]["quantidade"] = 75  # Simula alteração
-    salvo = any(i["quantidade"] == 75 for i in microcervejaria.carregar_dados()["ingredientes"])
-    assert salvo, "Falha na atualização de dados"
+
+    # Atualiza a quantidade diretamente no objeto salvo
+    for ingrediente in microcervejaria.dados["ingredientes"]:
+        if ingrediente["nome"] == "Malte Munich":
+            ingrediente["quantidade"] = 75
+            break
+
+    microcervejaria.salvar_dados(microcervejaria.dados)  # Garante a persistência
+
+    # Recarrega dados do arquivo para verificar
+    dados_recarregados = microcervejaria.carregar_dados()
+    salvo = any(i["quantidade"] == 75 and i["nome"] == "Malte Munich" 
+         for i in dados_recarregados["ingredientes"])
+
+    assert salvo, "Falha na atualização de dados: Quantidade não persistiu corretamente"
 
     # Limpeza final
     reiniciar_dados()

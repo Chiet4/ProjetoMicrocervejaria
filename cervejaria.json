@@ -1,12 +1,4 @@
 {
     "receitas": [],
-    "ingredientes": [
-        {
-            "nome": "Malte Munich",
-            "fornecedor": "Fornecedor Z",
-            "preco": 12.75,
-            "validade": "06/2025",
-            "quantidade": 100
-        }
-    ]
+    "ingredientes": []
 }

@@ -1,18 +1,22 @@
 {
     "receitas": [
         {
-            "nome": "IPA Clássica",
-            "ingredientes": ["Malte Pale Ale", "Lúpulo Citra", "Levedura American Ale"],
-            "descricao": "Uma IPA com aroma cítrico e amargor equilibrado."
-        },
-        {
             "nome": "Stout Cremosa",
-            "ingredientes": ["Malte Chocolate", "Malte Caramel", "Lúpulo Fuggle", "Levedura Stout"],
+            "ingredientes": [
+                "Malte Chocolate",
+                "Malte Caramel",
+                "Lúpulo Fuggle",
+                "Levedura Stout"
+            ],
             "descricao": "Stout encorpada com toques de café e chocolate."
         },
         {
             "nome": "Pilsen Tradicional",
-            "ingredientes": ["Malte Pilsen", "Lúpulo Saaz", "Levedura Lager"],
+            "ingredientes": [
+                "Malte Pilsen",
+                "Lúpulo Saaz",
+                "Levedura Lager"
+            ],
             "descricao": "Cerveja leve e refrescante, ideal para dias quentes."
         }
     ],
@@ -20,14 +24,14 @@
         {
             "nome": "Malte Pale Ale",
             "fornecedor": "Malteiros do Brasil",
-            "preco": 15.50,
+            "preco": 15.5,
             "validade": "12/2025",
             "quantidade": 200
         },
         {
             "nome": "Lúpulo Citra",
             "fornecedor": "HopMaster",
-            "preco": 25.00,
+            "preco": 25.0,
             "validade": "05/2026",
             "quantidade": 50
         },
@@ -39,51 +43,44 @@
             "quantidade": 100
         },
         {
-            "nome": "Malte Pilsen",
-            "fornecedor": "Malteiros do Brasil",
-            "preco": 12.00,
-            "validade": "03/2025",
-            "quantidade": 300
-        },
-        {
             "nome": "Lúpulo Saaz",
             "fornecedor": "HopMaster",
-            "preco": 20.00,
+            "preco": 20.0,
             "validade": "11/2025",
             "quantidade": 80
         },
         {
             "nome": "Levedura Lager",
             "fornecedor": "Fermentos Europeus",
-            "preco": 10.00,
+            "preco": 10.0,
             "validade": "09/2024",
             "quantidade": 150
         },
         {
             "nome": "Malte Chocolate",
             "fornecedor": "Malteiros do Brasil",
-            "preco": 18.00,
+            "preco": 18.0,
             "validade": "06/2025",
             "quantidade": 120
         },
         {
             "nome": "Malte Caramel",
             "fornecedor": "Malteiros do Brasil",
-            "preco": 16.50,
+            "preco": 16.5,
             "validade": "08/2025",
             "quantidade": 100
         },
         {
             "nome": "Lúpulo Fuggle",
             "fornecedor": "HopMaster",
-            "preco": 22.00,
+            "preco": 22.0,
             "validade": "10/2025",
             "quantidade": 60
         },
         {
             "nome": "Levedura Stout",
             "fornecedor": "Fermentos USA",
-            "preco": 9.50,
+            "preco": 9.5,
             "validade": "02/2025",
             "quantidade": 90
         }

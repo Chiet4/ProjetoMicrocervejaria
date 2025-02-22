@@ -5,14 +5,16 @@ ARQUIVO_DADOS = "cervejaria.json"
 
 def carregar_dados():
     try:
-        with open(ARQUIVO_DADOS, "r") as f:
+        with open(ARQUIVO_DADOS, "r", encoding="utf-8") as f:
             return json.load(f)
+
     except FileNotFoundError:
         return {"receitas": [], "ingredientes": []}
 
 def salvar_dados(dados):
-    with open(ARQUIVO_DADOS, "w") as f:
-        json.dump(dados, f, indent=4)
+    with open(ARQUIVO_DADOS, "w", encoding="utf-8") as f:
+        json.dump(dados, f, indent=4, ensure_ascii=False)
+
 
 dados = carregar_dados()
 
@@ -107,7 +109,7 @@ def menu():
         elif opcao == "7":
             print("Saindo do programa...")
             break
-        
+
         else:
             print("Opção inválida, tente novamente.")
 

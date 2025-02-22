@@ -115,6 +115,9 @@ def cadastrar_ingrediente(nome=None, fornecedor=None, preco=None, validade=None,
     """
     if nome is None:
         nome = input("Nome do ingrediente: ").strip()
+        if not nome:  # <--- Nova validação adicionada
+            print("Erro: Nome do ingrediente não pode ser vazio.")
+            return
         if ingredient_exists(nome):
             print("Um ingrediente com esse nome já existe. Operação cancelada.")
             return
@@ -123,6 +126,9 @@ def cadastrar_ingrediente(nome=None, fornecedor=None, preco=None, validade=None,
         validade = input("Validade do ingrediente: ").strip()
         quantidade = safe_read_int("Quantidade em estoque: ")
     else:
+        if not nome:  # <--- Validação para chamadas diretas
+            print("Erro: Nome do ingrediente não pode ser vazio.")
+            return
         if ingredient_exists(nome):
             print("Um ingrediente com esse nome já existe. Operação cancelada.")
             return

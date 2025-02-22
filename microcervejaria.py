@@ -1,3 +1,6 @@
+from datetime import datetime
+
+# Classe que simula um banco de dados "in-memory"
 class Database:
     def __init__(self):
         self.receitas = {}
@@ -9,28 +12,33 @@ class Database:
         self.id_counter[entity] += 1
         return next_id
 
+# Classe que representa uma receita de cerveja
 class Receita:
     def __init__(self, id, nome, descricao, ingredientes):
         self.id = id
         self.nome = nome
         self.descricao = descricao
-        self.ingredientes = ingredientes
+        self.ingredientes = ingredientes  # Lista de IDs dos ingredientes
 
     def __str__(self):
-        return f"Receita(id={self.id}, nome='{self.nome}', ingredientes={self.ingredientes})"
+        ingr_ids = ", ".join(str(i) for i in self.ingredientes)
+        return f"Receita(id={self.id}, nome='{self.nome}', ingredientes=[{ingr_ids}])"
 
+# Classe que representa um ingrediente
 class Ingrediente:
     def __init__(self, id, nome, fornecedor, preco, validade, estoque):
         self.id = id
         self.nome = nome
         self.fornecedor = fornecedor
         self.preco = preco
-        self.validade = validade
+        self.validade = validade  # Armazenado como objeto date
         self.estoque = estoque
 
     def __str__(self):
-        return f"Ingrediente(id={self.id}, nome='{self.nome}', estoque={self.estoque})"
+        validade_str = self.validade.strftime('%d/%m/%Y') if self.validade else "N/A"
+        return f"Ingrediente(id={self.id}, nome='{self.nome}', estoque={self.estoque}, validade='{validade_str}')"
 
+# CRUD para receitas
 class ReceitaCRUD:
     def __init__(self, db):
         self.db = db
@@ -62,6 +70,7 @@ class ReceitaCRUD:
     def list_receitas(self):
         return list(self.db.receitas.values())
 
+# CRUD para ingredientes
 class IngredienteCRUD:
     def __init__(self, db):
         self.db = db
@@ -97,6 +106,26 @@ class IngredienteCRUD:
     def list_ingredientes(self):
         return list(self.db.ingredientes.values())
 
+# Função para exibir uma tabela formatada de ingredientes
+def display_ingredientes(ingredientes):
+    print("\n" + "-" * 90)
+    print(f"{'ID':<5} {'Nome':<20} {'Fornecedor':<25} {'Preço':<10} {'Validade':<12} {'Estoque':<10}")
+    print("-" * 90)
+    for ing in ingredientes:
+        validade_str = ing.validade.strftime('%d/%m/%Y') if ing.validade else "N/A"
+        print(f"{ing.id:<5} {ing.nome:<20} {ing.fornecedor:<25} {ing.preco:<10.2f} {validade_str:<12} {ing.estoque:<10}")
+    print("-" * 90)
+
+# Função para exibir uma tabela formatada de receitas
+def display_receitas(receitas):
+    print("\n" + "-" * 100)
+    print(f"{'ID':<5} {'Nome':<20} {'Descrição':<40} {'IDs dos Ingredientes':<25}")
+    print("-" * 100)
+    for rec in receitas:
+        ingr_ids = ", ".join(str(i) for i in rec.ingredientes)
+        print(f"{rec.id:<5} {rec.nome:<20} {rec.descricao:<40} {ingr_ids:<25}")
+    print("-" * 100)
+
 def main():
     db = Database()
     receita_crud = ReceitaCRUD(db)
@@ -127,15 +156,15 @@ def main():
                 lista_ids = []
             
             nova_receita = receita_crud.create_receita(nome, descricao, lista_ids)
-            print(f"\nReceita cadastrada com sucesso: {nova_receita}")
+            print("\nReceita cadastrada com sucesso!")
+            print(f"-> ID: {nova_receita.id} | Nome: {nova_receita.nome}")
 
         # 2. Listar receitas
         elif opcao == '2':
             receitas = receita_crud.list_receitas()
             if receitas:
                 print("\n--- LISTA DE RECEITAS ---")
-                for r in receitas:
-                    print(r)
+                display_receitas(receitas)
             else:
                 print("\nNenhuma receita cadastrada.")
 
@@ -154,7 +183,7 @@ def main():
 
             novo_nome = input(f"Novo nome (ou Enter para manter '{receita_existente.nome}'): ")
             nova_descricao = input(f"Nova descrição (ou Enter para manter '{receita_existente.descricao}'): ")
-            nova_lista_str = input(f"Novos IDs de ingredientes (separados por vírgula) ou Enter para manter {receita_existente.ingredientes}: ")
+            nova_lista_str = input(f"Novos IDs dos ingredientes (separados por vírgula) ou Enter para manter {receita_existente.ingredientes}: ")
             
             if not novo_nome:
                 novo_nome = receita_existente.nome
@@ -172,7 +201,8 @@ def main():
                 descricao=nova_descricao,
                 ingredientes=nova_lista_ids
             )
-            print(f"\nReceita atualizada: {receita_atualizada}")
+            print("\nReceita atualizada com sucesso!")
+            print(f"-> ID: {receita_atualizada.id} | Nome: {receita_atualizada.nome}")
 
         # 4. Excluir receita
         elif opcao == '4':
@@ -196,7 +226,12 @@ def main():
                 preco = float(input("Preço: "))
             except ValueError:
                 preco = 0.0
-            validade = input("Data de validade (YYYY-MM-DD): ")
+            validade_input = input("Data de validade (DD/MM/YYYY): ")
+            try:
+                validade = datetime.strptime(validade_input, '%d/%m/%Y').date()
+            except ValueError:
+                print("Formato de data inválido. Utilize DD/MM/YYYY.")
+                validade = None
             try:
                 estoque = int(input("Quantidade em estoque: "))
             except ValueError:
@@ -205,15 +240,15 @@ def main():
             novo_ingrediente = ingrediente_crud.create_ingrediente(
                 nome, fornecedor, preco, validade, estoque
             )
-            print(f"\nIngrediente cadastrado com sucesso: {novo_ingrediente}")
+            print("\nIngrediente cadastrado com sucesso!")
+            print(f"-> ID: {novo_ingrediente.id} | Nome: {novo_ingrediente.nome}")
 
         # 6. Listar ingredientes
         elif opcao == '6':
             ingredientes = ingrediente_crud.list_ingredientes()
             if ingredientes:
                 print("\n--- LISTA DE INGREDIENTES ---")
-                for ing in ingredientes:
-                    print(ing)
+                display_ingredientes(ingredientes)
             else:
                 print("\nNenhum ingrediente cadastrado.")
 
@@ -238,8 +273,14 @@ def main():
             except ValueError:
                 novo_preco = ingrediente_existente.preco
 
-            nova_validade = input(f"Nova validade (ou Enter para manter '{ingrediente_existente.validade}'): ")
-            if not nova_validade:
+            nova_validade_input = input(f"Nova validade (DD/MM/YYYY) (ou Enter para manter '{ingrediente_existente.validade.strftime('%d/%m/%Y') if ingrediente_existente.validade else 'N/A'}'): ")
+            if nova_validade_input.strip():
+                try:
+                    nova_validade = datetime.strptime(nova_validade_input, '%d/%m/%Y').date()
+                except ValueError:
+                    print("Formato de data inválido. Mantendo valor atual.")
+                    nova_validade = ingrediente_existente.validade
+            else:
                 nova_validade = ingrediente_existente.validade
 
             try:
@@ -256,7 +297,8 @@ def main():
                 validade=nova_validade,
                 estoque=novo_estoque
             )
-            print(f"\nIngrediente atualizado: {ingrediente_atualizado}")
+            print("\nIngrediente atualizado com sucesso!")
+            print(f"-> ID: {ingrediente_atualizado.id} | Nome: {ingrediente_atualizado.nome}")
 
         # 8. Excluir ingrediente
         elif opcao == '8':

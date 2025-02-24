@@ -1,11 +1,9 @@
 import json
 
-# Constante com o nome do arquivo de dados
 ARQUIVO_DADOS = "cervejaria.json"
 
-
 def carregar_dados():
-    """Carrega os dados do arquivo JSON. Retorna uma estrutura padrão se o arquivo não existir ou estiver corrompido."""
+    
     try:
         with open(ARQUIVO_DADOS, "r", encoding="utf-8") as f:
             return json.load(f)
@@ -33,7 +31,7 @@ dados = carregar_dados()
 
 
 def safe_read_float(prompt):
-    """Lê um valor float de forma segura, repetindo a solicitação até que seja informado um número válido."""
+    
     while True:
         try:
             return float(input(prompt))
@@ -42,7 +40,7 @@ def safe_read_float(prompt):
 
 
 def safe_read_int(prompt):
-    """Lê um valor inteiro de forma segura, repetindo a solicitação até que seja informado um número inteiro válido."""
+    
     while True:
         try:
             return int(input(prompt))
@@ -51,20 +49,17 @@ def safe_read_int(prompt):
 
 
 def recipe_exists(nome):
-    """Verifica se uma receita com o mesmo nome já existe (ignora diferenças entre maiúsculas e minúsculas)."""
+    
     return any(r["nome"].lower() == nome.lower() for r in dados["receitas"])
 
 
 def ingredient_exists(nome):
-    """Verifica se um ingrediente com o mesmo nome já existe (ignora diferenças entre maiúsculas e minúsculas)."""
+    
     return any(i["nome"].lower() == nome.lower() for i in dados["ingredientes"])
 
 
 def cadastrar_receita(nome=None, ingredientes=None, descricao=None):
-    """
-    Cadastra uma nova receita.
-    Se os parâmetros não forem fornecidos, os dados são solicitados via input.
-    """
+    
     if nome is None:
         nome = input("Nome da receita: ").strip()
         if recipe_exists(nome):
@@ -85,7 +80,7 @@ def cadastrar_receita(nome=None, ingredientes=None, descricao=None):
 
 
 def listar_receitas():
-    """Exibe todas as receitas cadastradas."""
+    
     print("\nReceitas cadastradas:")
     if not dados["receitas"]:
         print("Nenhuma receita cadastrada.")
@@ -96,7 +91,7 @@ def listar_receitas():
 
 
 def remover_receita(nome=None):
-    """Remove uma receita pelo nome."""
+    
     if nome is None:
         nome = input("Nome da receita a remover: ").strip()
     receitas_antes = len(dados["receitas"])
@@ -109,10 +104,7 @@ def remover_receita(nome=None):
 
 
 def cadastrar_ingrediente(nome=None, fornecedor=None, preco=None, validade=None, quantidade=None):
-    """
-    Cadastra um novo ingrediente.
-    Se os parâmetros não forem fornecidos, os dados são solicitados via input.
-    """
+    
     if nome is None:
         nome = input("Nome do ingrediente: ").strip()
         if not nome:  # <--- Nova validação adicionada
@@ -146,7 +138,7 @@ def cadastrar_ingrediente(nome=None, fornecedor=None, preco=None, validade=None,
 
 
 def listar_ingredientes():
-    """Exibe todos os ingredientes cadastrados."""
+    
     print("\nIngredientes cadastrados:")
     if not dados["ingredientes"]:
         print("Nenhum ingrediente cadastrado.")
@@ -157,7 +149,7 @@ def listar_ingredientes():
 
 
 def remover_ingrediente(nome=None):
-    """Remove um ingrediente pelo nome."""
+    
     if nome is None:
         nome = input("Nome do ingrediente a remover: ").strip()
     ingredientes_antes = len(dados["ingredientes"])
@@ -170,7 +162,7 @@ def remover_ingrediente(nome=None):
 
 
 def exibir_menu():
-    """Exibe as opções do menu."""
+    #Exibe as opções do menu.
     print("\nMenu:")
     print("1. Cadastrar Receita")
     print("2. Listar Receitas")
@@ -182,13 +174,13 @@ def exibir_menu():
 
 
 def menu():
-    """Gerencia a interação com o usuário."""
+    
     while True:
         exibir_menu()
         opcao = input("Escolha uma opção: ").strip()
 
         if opcao == "1":
-            cadastrar_receita()
+            cadastrar_receita() #função para cadastra receitas
         elif opcao == "2":
             listar_receitas()
         elif opcao == "3":
@@ -207,7 +199,7 @@ def menu():
 
 
 def main():
-    """Função principal do programa."""
+    #Função principal do programa.
     menu()
 
 

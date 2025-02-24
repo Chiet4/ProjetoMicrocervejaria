@@ -18,10 +18,14 @@ def carregar_dados():
 
 
 def salvar_dados(dados):
-    """Salva os dados no arquivo JSON com formatação e codificação UTF-8."""
+
     try:
-        with open(ARQUIVO_DADOS, "w", encoding="utf-8") as f:
+        temp_file = ARQUIVO_DADOS + ".temp"
+        with open(temp_file, "w", encoding="utf-8") as f:
             json.dump(dados, f, indent=4, ensure_ascii=False)
+        # Substitui o arquivo original apenas se a escrita foi bem-sucedida
+        import os
+        os.replace(temp_file, ARQUIVO_DADOS)
     except Exception as e:
         print(f"Erro ao salvar os dados: {e}")
 
@@ -59,7 +63,7 @@ def ingredient_exists(nome):
 
 
 def cadastrar_receita(nome=None, ingredientes=None, descricao=None):
-    
+    global dados
     if nome is None:
         nome = input("Nome da receita: ").strip()
         if recipe_exists(nome):
@@ -81,13 +85,14 @@ def cadastrar_receita(nome=None, ingredientes=None, descricao=None):
 
 def listar_receitas():
     
-    print("\nReceitas cadastradas:")
     if not dados["receitas"]:
         print("Nenhuma receita cadastrada.")
         return
+    
+    print("Receitas cadastradas:")
     for r in dados["receitas"]:
         ingredientes = ', '.join(r['ingredientes'])
-        print(f"- {r['nome']} (Ingredientes: {ingredientes}) | Descrição: {r['descricao']}")
+        print(f"- {r['nome']} | Ingredientes: {ingredientes} | Descrição: {r['descricao']}")
 
 
 def remover_receita(nome=None):
@@ -104,25 +109,30 @@ def remover_receita(nome=None):
 
 
 def cadastrar_ingrediente(nome=None, fornecedor=None, preco=None, validade=None, quantidade=None):
-    
+    global dados
+
+    if ingredient_exists(nome):
+            print("Erro: Um ingrediente com esse nome já existe. Operação cancelada.")
+            return
+            
     if nome is None:
         nome = input("Nome do ingrediente: ").strip()
-        if not nome:  # <--- Nova validação adicionada
+        if not nome:
             print("Erro: Nome do ingrediente não pode ser vazio.")
             return
-        if ingredient_exists(nome):
-            print("Um ingrediente com esse nome já existe. Operação cancelada.")
-            return
+
         fornecedor = input("Fornecedor do ingrediente: ").strip()
+        
         preco = safe_read_float("Preço do ingrediente: ")
-        validade = input("Validade do ingrediente: ").strip()
-        quantidade = safe_read_int("Quantidade em estoque: ")
-    else:
-        if not nome:  # <--- Validação para chamadas diretas
-            print("Erro: Nome do ingrediente não pode ser vazio.")
+        if preco <= 0:
+            print("Erro: O preço deve ser maior que zero.")
             return
-        if ingredient_exists(nome):
-            print("Um ingrediente com esse nome já existe. Operação cancelada.")
+
+        validade = input("Validade do ingrediente: ").strip()
+
+        quantidade = safe_read_int("Quantidade em estoque: ")
+        if quantidade <= 0:
+            print("Erro: A quantidade deve ser maior que zero.")
             return
 
     ingrediente = {

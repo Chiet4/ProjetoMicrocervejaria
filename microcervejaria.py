@@ -9,8 +9,6 @@ def carregar_dados():
     try:
         with open(ARQUIVO_DADOS, "r", encoding="utf-8") as f:
             return json.load(f)
-    except FileNotFoundError:
-        return {"receitas": [], "ingredientes": []}
     except json.JSONDecodeError:
         print("Erro: Arquivo de dados corrompido. Reiniciando os dados.")
         return {"receitas": [], "ingredientes": []}

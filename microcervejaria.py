@@ -174,7 +174,7 @@ def remover_ingrediente(nome=None):
 
 def exibir_menu():
     #Exibe as opções do menu.
-    print("\nMenu:")
+    print("\nSistema Microcervejaria:")
     print("1. Cadastrar Receita")
     print("2. Listar Receitas")
     print("3. Remover Receita")

@@ -189,7 +189,7 @@ def menu():
         opcao = input("Escolha uma opção: ").strip()
 
         if opcao == "1":
-            cadastrar_receita() #função para cadastra receitas
+            cadastrar_receita() 
         elif opcao == "2":
             listar_receitas()
         elif opcao == "3":
@@ -208,7 +208,7 @@ def menu():
 
 
 def main():
-    #Função principal do programa.
+    
     menu()
 
 

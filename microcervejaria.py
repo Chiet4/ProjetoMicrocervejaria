@@ -1,4 +1,6 @@
 import json
+import os
+
 
 ARQUIVO_DADOS = "cervejaria.json"
 
@@ -24,7 +26,7 @@ def salvar_dados(dados):
         with open(temp_file, "w", encoding="utf-8") as f:
             json.dump(dados, f, indent=4, ensure_ascii=False)
         # Substitui o arquivo original apenas se a escrita foi bem-sucedida
-        import os
+        # Prevenção de erro
         os.replace(temp_file, ARQUIVO_DADOS)
     except Exception as e:
         print(f"Erro ao salvar os dados: {e}")
@@ -111,15 +113,14 @@ def remover_receita(nome=None):
 def cadastrar_ingrediente(nome=None, fornecedor=None, preco=None, validade=None, quantidade=None):
     global dados
 
-    if ingredient_exists(nome):
-            print("Erro: Um ingrediente com esse nome já existe. Operação cancelada.")
-            return
-            
     if nome is None:
         nome = input("Nome do ingrediente: ").strip()
         if not nome:
             print("Erro: Nome do ingrediente não pode ser vazio.")
             return
+        if ingredient_exists(nome):
+            print("Erro: Um ingrediente com esse nome já existe. Operação cancelada.")
+            return  
 
         fornecedor = input("Fornecedor do ingrediente: ").strip()
         
